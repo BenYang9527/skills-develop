@@ -67,6 +67,8 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 
 AI 将想法或外部资料整理为 Overview、Requirements 和 AC。外部链接在 Overview 追溯，缺口或冲突交用户确认；开发使用本轮已确认文档。产品 Overview 管本轮安排，各开发任务管自己的进度。只做产品设计时，Confirm 后结束。
 
+新需求的交互 HTML 原型放在本需求的 `product/prototype.html`，并在产品 Overview 的需求来源记录入口；已确认的旧原型保留原位。验收后原型保留为当时的设计依据。 接入项目时将此约定写入项目的 .harness/docs/clarify.md 产品阶段。
+
 ### 开发工作流
 
 | # | 步骤 | 产物 | 说明 |
