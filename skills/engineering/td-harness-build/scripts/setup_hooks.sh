@@ -7,6 +7,18 @@ start="${1:-$PWD}"
 root="$(git -C "$start" rev-parse --show-toplevel 2>/dev/null)" || {
   printf '%s\n' '[SKIP] Git is not initialized; hooks were not installed.'; exit 0
 }
+start="$(cd "$start" && pwd -P)"
+root="$(cd "$root" && pwd -P)"
+if [[ "$start" != "$root" ]]; then
+  printf '%s\n' '[SKIP] Target is not the Git root; parent repository hooks were not changed.'; exit 0
+fi
+# Linked worktrees and external Git directories share state outside this target.
+common="$(git -C "$root" rev-parse --git-common-dir)"
+[[ "$common" == /* ]] || common="$root/$common"
+common="$(cd "$common" && pwd -P)"
+if [[ -L "$root/.git" || "$common" != "$root/.git" ]]; then
+  printf '%s\n' '[SKIP] Git state is outside this target; integrate shared hooks separately under project authorization.'; exit 0
+fi
 source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 cd "$root"
 if [[ -L scripts || ( -e scripts && ! -d scripts ) ]]; then

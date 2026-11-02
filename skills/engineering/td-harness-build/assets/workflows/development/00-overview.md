@@ -44,7 +44,7 @@ Submit 的状态预登记与冻结按 [07-submit.md](07-submit.md) 执行；预�
 
 | 内容 | 产品文档入口 |
 |---|---|
-| 所属需求 | 产品 Overview 链接 |
+| 所属需求与启动授权 | 产品 Overview 链接及 §4.2 本 Task 的授权记录 |
 | 本任务需求与验收条件（Acceptance Criteria，AC） | Requirements 相关章节及 AC 条目链接，注明本地 AC 编号和简短含义 |
 | 相关长期产品规则 | 本次涉及的文档或章节链接 |
 

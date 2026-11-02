@@ -1,9 +1,11 @@
-# 集成测试入口维护
+# 集成测试入口生成指导
 
-> **独立初始化 Agent 指令**：执行前读取 [派发约定](init-agents.md#2-派发约定)，按主 Agent 指定的输入、文件范围和授权处理本专题。
+> **使用边界**：仅供初始化／升级。先读 [派发约定](init-agents.md#2-派发约定) 与 [共同生成方法](init-project-docs.md)，按主 Agent 指定的输入、文件范围和授权处理。
 
-> 填写 **.harness/docs/testing/integration-test.md** 时读取。
+## 1. 调查与填写
 
-保留最小入口，不自动生成完整测试体系。检查项目实际测试、命令和环境：已有则登记有效入口；没有则注明“未接入”，不编造环境、框架或执行结果。
+检查实际测试、命令和依赖环境，按 [integration-test.md](../assets/project/docs/testing/integration-test.md) 登记现有有效入口；无入口按模板记录状态，不自动生成完整测试体系。
 
-已有项目测试规范与人工内容按 **[upgrade-project.md](upgrade-project.md)** 保留，不用最小模板覆盖。只有本次明确需要接入 IT 时，才在开发 **Plan** 中设计方案；必要验证未接入按 **verification.md** 报告缺口。
+## 2. 保留与报告
+
+按升级授权融合已有测试规范与人工内容，不用最小模板覆盖。返回入口与核验依据；必要检查缺口按模板指向的 verification.md 处理。

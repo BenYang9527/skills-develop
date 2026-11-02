@@ -1,13 +1,21 @@
-# 02. 验收条件（Acceptance Criteria，AC）
+# 03. 验收条件（Acceptance Criteria，AC）
 
 ## 1. 验收依据
 
-- **对应需求**：[Requirements](01-requirements.md) 中的具体章节。
+- **对应需求**：[Delivery Requirements（交付需求）](02-delivery-requirements.md) 中的具体章节。
 - **原型依据**：[产品 Overview](00-overview.md) 中的原型入口，注明对应页面、状态及本地 AC 编号；没有则写“不涉及”。
 
 ## 2. 本轮 AC
 
-### 2.1 行为场景
+### 2.1 AC 索引与关联
+
+每个 AC 关联具体 Story（用户故事）编号；共同约束直接关联交付需求章节，不强行编造 Story。本表仅维护入口与关联，场景正文留在 feature 中，其他条件留在 §2.3。
+
+| AC 编号 | Story / 共同约束 | 验收正文入口 |
+|---|---|---|
+| AC-001（示例） | US-01 | acceptance.feature 对应场景 |
+
+### 2.2 行为场景
 
 确认 AC 或设计、执行验收测试（Acceptance Test，AT）时，读取 [acceptance.feature](acceptance.feature)；修改行为场景也在该文件进行。
 
@@ -15,9 +23,9 @@
 - **覆盖**：按实际风险补充权限、失败、空值和重复操作等场景。
 - **编号**：每个场景或独立验收条件使用唯一、稳定的本地编号，如 **AC-001**。新增时分配新编号，删除或调序不重排、不复用旧编号；开发任务和测试统一引用本地编号。
 
-### 2.2 其他验收条件
+### 2.3 其他验收条件
 
-没有用场景表达的要求写在这里，注明本地 AC 编号、来源定位、适用条件和可验证标准。来源引用对应 Requirements 章节或 Overview 来源项；已有场景不重复，无则写“不涉及”。
+没有用场景表达的要求写在这里，注明本地 AC 编号、来源定位、适用条件和可验证标准。来源引用对应 Delivery Requirements 章节或 Overview 来源项；已有场景不重复，无则写“不涉及”。
 
 -
 

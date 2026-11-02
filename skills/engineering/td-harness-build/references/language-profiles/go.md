@@ -10,7 +10,7 @@
 | 圈 / 认知复杂度、嵌套 | golangci-lint 的 gocyclo / gocognit / revive | 共用已有 lint；配置样例见 [资产](../../assets/.golangci.yml)，合并而不覆盖项目配置 |
 | CRAP | [padiazg/go-crap](https://github.com/padiazg/go-crap) v0.5.1 | 支持已有覆盖 profile；已测边界。构建工具需要 Go 1.26.2，不能因此修改项目 go.mod |
 | 变异 | [gremlins](https://github.com/go-gremlins/gremlins) v0.6.0 | 支持范围及逐项状态；默认退出成功不等于所有变异已被发现 |
-| 重复 | [mibk/dupl](https://github.com/mibk/dupl) v1.1.0 | 实测可跨包比较；不只依赖当前 golangci-lint 的同包 dupl 检查 |
+| 重复检测 | [jscpd共享接入](../setup-checks.md#4-重复代码检测jscpd) | 版本、范围与验证只维护在共享指导；已有有效工具继续沿用 |
 | 架构依赖 | 项目 depguard 规则 + Go 编译 | 只检查项目明确的禁止依赖与循环；函数语义归属仍需独立 Review |
 
 ## Go 单元测试默认方案
@@ -80,7 +80,7 @@ gremlins --config <项目配置> unleash --workers 1 --output <临时结果文�
 dupl -t 150 -plumbing -files < <显式源码文件清单>
 ```
 
-`150` 是重复候选的检测起点，不是函数行数或零重复门槛。重复扫描的输入先排除生成代码；读取两端位置和语义，不自动抽象。
+以上dupl命令仅供已有 **mibk/dupl v1.1.0** 项目沿用；新接入默认见共享jscpd指导，不额外安装两套。`150` 是重复候选的检测起点，不是函数行数或零重复门槛。重复扫描的输入先排除生成代码；读取两端位置和语义，不自动抽象。
 
 ## 结果核对
 

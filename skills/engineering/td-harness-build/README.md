@@ -36,6 +36,11 @@ Tell the AI what you need. It will follow the project's **Workflow**.
 
 ## 3. Workflow
 
+1. **Product work** ends when the delivery requirements and acceptance criteria (AC) are confirmed. Development can start in another session.
+2. **Development starts** after the delivery design is confirmed and the tasks allowed to start are explicitly authorized. You can authorize just one task.
+3. **Each task** begins with development Clarify. Pause for an answer when a key decision requires the user. After clarification, refine the Plan and implement when it is ready within the authorized scope; individual Plans do not require another approval.
+4. **Submission** follows successful verification and independent review, within the effective authorization. Check merge and release authorization separately.
+
 [![Product and development workflow](assets/workflow-overview.en.svg)](assets/workflow-overview.en.svg)
 
 <details>
@@ -45,8 +50,12 @@ Tell the AI what you need. It will follow the project's **Workflow**.
 
 </details>
 
-### Product and development tasks
+### Parallel execution
+
+Only authorized tasks with ready dependencies may start. The first layer shows task dependencies; the second expands one task's implementation.
 
 <p align="center">
-  <a href="assets/task-relationships.en.svg"><img src="assets/task-relationships.en.svg" alt="One product task maps to one or more development tasks" width="900"></a>
+  <a href="assets/task-relationships.en.svg"><img src="assets/task-relationships.en.svg" alt="Parallel tasks and parallel implementation blocks within one task" width="1200"></a>
 </p>
+
+Use one session to coordinate multiple tasks, or separate terminals for individual tasks. See [Agent responsibilities](assets/project/agent-roles.md#1-分工) for ownership and resource isolation.

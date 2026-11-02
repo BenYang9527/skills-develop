@@ -45,11 +45,29 @@ for path in .harness/docs/entry .harness/plans/entry .harness/templates/product/
   safe_parent "$path" || exit 2
 done
 
+# Shared by preflight and material lookup so flat legacy names cannot bypass approval.
+flat_legacy_names() {
+  case "$1" in
+    docs/data/database.md) printf '%s' 'database.md' ;;
+    docs/contracts/api-standards.md) printf '%s' 'api-standards.md' ;;
+    docs/devops/local-dev.md) printf '%s' 'development.md env.md local-dev.md' ;;
+    docs/devops/release.md) printf '%s' 'deployment.md release.md' ;;
+  esac
+}
+
 legacy=false
-for path in harness .harness/agents.md .harness/context .harness/tasks .harness/docs/sqls .harness/docs/apis .harness/docs/runtime .harness/docs/devops/development.md .harness/docs/devops/env.md .harness/docs/devops/deployment.md .harness/docs/devops/test-env-deploy.md .harness/docs/unittest .harness/docs/integration_test .harness/docs/database.md .harness/docs/relationship.md .harness/plans/_template .harness/plans/_dev-template .harness/plans/_product-template ARCHITECTURE.md; do
+for path in harness .harness/agents.md .harness/context .harness/tasks .harness/docs/sqls .harness/docs/apis .harness/docs/runtime .harness/docs/devops/development.md .harness/docs/devops/env.md .harness/docs/devops/deployment.md .harness/docs/devops/test-env-deploy.md .harness/docs/unittest .harness/docs/integration_test .harness/docs/relationship.md .harness/plans/_template .harness/plans/_dev-template .harness/plans/_product-template .harness/templates/product/01-requirements.md .harness/templates/product/02-acceptance-criteria.md .harness/docs/product-state ARCHITECTURE.md; do
   if [[ -e "$target/$path" || -L "$target/$path" ]]; then
     legacy=true; printf '[MERGE] Existing layout retained: %s\n' "$path"
   fi
+done
+for relative in docs/data/database.md docs/contracts/api-standards.md docs/devops/local-dev.md docs/devops/release.md; do
+  for name in $(flat_legacy_names "$relative"); do
+    path=".harness/docs/$name"
+    if [[ -e "$target/$path" || -L "$target/$path" ]]; then
+      legacy=true; printf '[MERGE] Existing layout retained: %s\n' "$path"
+    fi
+  done
 done
 if [[ "$legacy" == true && "$accept_legacy" != true ]]; then
   printf '%s\n' '[CONFIRM] Review the layout migration before preparing new paths. No files changed.'
@@ -105,13 +123,7 @@ while IFS= read -r -d '' source; do
       done ;;
     docs/devops/release.md) [[ ! -e "$target/.harness/docs/devops/deployment.md" && ! -L "$target/.harness/docs/devops/deployment.md" ]] || old_found=true ;;
   esac
-  flat_names=""
-  case "$relative" in
-    docs/data/database.md) flat_names="database.md" ;;
-    docs/contracts/api-standards.md) flat_names="api-standards.md" ;;
-    docs/devops/local-dev.md) flat_names="development.md env.md local-dev.md" ;;
-    docs/devops/release.md) flat_names="deployment.md release.md" ;;
-  esac
+  flat_names="$(flat_legacy_names "$relative")"
   for name in $flat_names; do
     for base in "$target/.harness/docs" "$target/harness"; do
       [[ ! -e "$base/$name" && ! -L "$base/$name" ]] || old_found=true

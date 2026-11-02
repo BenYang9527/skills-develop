@@ -10,7 +10,7 @@
 
 <path id="node-route" d="M750 105L930 175L750 245L570 175Z" class="control" />
 <text x="750" y="166" text-anchor="middle" class="name">③ 判断原因与影响</text><text x="750" y="194" text-anchor="middle" class="small">主 Agent 按阶段派发</text>
-<path data-from="route" data-to="user" d="M930 175H1110" class="back" /><text x="1020" y="161" text-anchor="middle" class="small">越界／争议／例外</text>
+<path data-from="route" data-to="user" d="M930 175H1110" class="back" /><text x="1020" y="161" text-anchor="middle" class="small">需用户决策</text>
 <rect id="node-user" x="1110" y="125" width="270" height="85" rx="8" class="human" /><text x="1245" y="157" text-anchor="middle" class="name">用户决定</text><text x="1245" y="186" text-anchor="middle" class="small">说明影响、建议后等待决定</text>
 <path data-from="user" data-to="route" d="M1245 210V260H860V202" class="back" /><text x="1050" y="251" text-anchor="middle" class="small">决定后再派发</text>
 
@@ -22,7 +22,7 @@
 <path data-from="route" data-to="06" d="M750 245C750 280 1175 270 1175 290V480" class="back" />
 <path data-from="route" data-to="07" d="M750 245C750 280 1365 270 1365 290V480" class="back" />
 <rect x="140" y="300" width="170" height="44" class="quiet" /><text x="225" y="326" text-anchor="middle" class="small">需求或 AC 有误</text>
-<rect x="330" y="300" width="170" height="44" class="quiet" /><text x="415" y="315" text-anchor="middle" class="small">方案／用例需修改</text><text x="415" y="337" text-anchor="middle" class="small">或 Plan 未获批准</text>
+<rect x="330" y="300" width="170" height="44" class="quiet" /><text x="415" y="315" text-anchor="middle" class="small">方案／用例需修改</text><text x="415" y="337" text-anchor="middle" class="small">完善当前 Plan</text>
 <rect x="520" y="300" width="170" height="44" class="quiet" /><text x="605" y="326" text-anchor="middle" class="small">代码或测试有误</text>
 <rect x="710" y="300" width="170" height="44" class="quiet" /><text x="795" y="326" text-anchor="middle" class="small">证据缺失／失效</text>
 <rect x="900" y="300" width="170" height="44" class="quiet" /><text x="985" y="326" text-anchor="middle" class="small">文档错误／遗漏</text>
@@ -33,11 +33,11 @@
 <text x="20" y="459" class="name">① 正常推进</text>
 <ellipse id="node-start" cx="65" cy="525" rx="45" ry="25" class="node" /><text x="65" y="531" text-anchor="middle">开始</text><path data-from="start" data-to="01" d="M110 525H150" class="normal" />
 <rect id="node-01" x="150" y="480" width="150" height="90" rx="7" class="node" /><text x="225" y="511" text-anchor="middle" class="name">01 Clarify</text><text x="225" y="540" text-anchor="middle" class="small">主 Agent 核验</text><path data-from="01" data-to="02" d="M300 525H340" class="normal" />
-<rect id="node-02" x="340" y="480" width="150" height="90" rx="7" class="node" /><text x="415" y="508" text-anchor="middle" class="name">02 Plan</text><text x="415" y="534" text-anchor="middle" class="small">主 Agent</text><text x="415" y="558" text-anchor="middle" class="small">用户批准后实现</text><path data-from="02" data-to="03" d="M490 525H530" class="normal" />
+<rect id="node-02" x="340" y="480" width="150" height="90" rx="7" class="node" /><text x="415" y="508" text-anchor="middle" class="name">02 Plan</text><text x="415" y="534" text-anchor="middle" class="small">主 Agent</text><text x="415" y="558" text-anchor="middle" class="small">范围内计划就绪</text><path data-from="02" data-to="03" d="M490 525H530" class="normal" />
 <rect id="node-03" x="530" y="480" width="150" height="90" rx="7" class="node" /><text x="605" y="511" text-anchor="middle" class="name">03 Implement</text><text x="605" y="540" text-anchor="middle" class="small">Coder</text><path data-from="03" data-to="04" d="M680 525H720" class="normal" />
 <rect id="node-04" x="720" y="480" width="150" height="90" rx="7" class="node" /><text x="795" y="511" text-anchor="middle" class="name">04 Verify</text><text x="795" y="540" text-anchor="middle" class="small">Verifier</text><path data-from="04" data-to="05" d="M870 525H910" class="normal" />
 <rect id="node-05" x="910" y="480" width="150" height="90" rx="7" class="node" /><text x="985" y="511" text-anchor="middle" class="name">05 Docs</text><text x="985" y="540" text-anchor="middle" class="small">Executor</text><path data-from="05" data-to="06" d="M1060 525H1100" class="normal" />
-<rect id="node-06" x="1100" y="480" width="150" height="90" rx="7" class="node" /><text x="1175" y="508" text-anchor="middle" class="name">06 Review</text><text x="1175" y="534" text-anchor="middle" class="small">Reviewer</text><text x="1175" y="558" text-anchor="middle" class="small">用户验收、授权</text><path data-from="06" data-to="07" d="M1250 525H1290" class="normal" />
+<rect id="node-06" x="1100" y="480" width="150" height="90" rx="7" class="node" /><text x="1175" y="508" text-anchor="middle" class="name">06 Review</text><text x="1175" y="534" text-anchor="middle" class="small">Reviewer</text><text x="1175" y="558" text-anchor="middle" class="small">核对审批、授权</text><path data-from="06" data-to="07" d="M1250 525H1290" class="normal" />
 <rect id="node-07" x="1290" y="480" width="150" height="90" rx="7" class="node" /><text x="1365" y="511" text-anchor="middle" class="name">07 Submit</text><text x="1365" y="540" text-anchor="middle" class="small">Executor</text><path data-from="07" data-to="end" d="M1440 525H1462" class="normal" /><ellipse id="node-end" cx="1490" cy="525" rx="28" ry="25" class="node" /><text x="1490" y="531" text-anchor="middle" class="small">完成</text>
 
 

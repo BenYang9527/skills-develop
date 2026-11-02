@@ -12,6 +12,7 @@
 | 嵌套 | [Lizard](https://github.com/terryyin/lizard) 1.24.1 NS 扩展 | 已测 4/5 层；只采用 NS 指标，不引入其函数长度等默认标准 |
 | CRAP | [poly-crap](https://github.com/drew-simmons/poly-crap) 0.8.2 | 与 JS/TS 共用；读取覆盖文件，生态较小 |
 | 变异 | [mutmut](https://mutmut.readthedocs.io/en/latest/) 3.8.0 | 本版需要 pytest 和 fork；Windows 需 WSL。不满足则报告缺口，不强换框架 |
+| 重复检测 | [jscpd共享接入](../setup-checks.md#4-重复代码检测jscpd) | 版本、范围与验证只维护在共享指导；已有有效工具继续沿用 |
 
 ## 命令与配置
 

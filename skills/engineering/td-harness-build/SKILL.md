@@ -32,12 +32,22 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 
 1. 读取目标项目的 AGENTS、Harness、Git 状态、分支及已有规则。多项目仓库先确定目标目录。
 2. 按 [upgrade-project.md](references/upgrade-project.md) 判断文件归属和修改边界。需要确认的迁移整批列出；获准后连续执行，出现新的越界操作才停止。
-3. 按 [独立初始化派发](references/init-agents.md) 先派只读能力探测 Agent，核对 API 和持久化证据；探测失败先解决缺口，不用默认值冒充结果。成功后使用 `scripts/build_harness.sh` 复制缺失骨架、更新工作流模板及 AGENTS 的标准 Workflow 章。运行前先保留该章中的项目独有规则，按升级规则迁入 Rules；脚本不负责语义融合；迁移遇到 `[CONFIRM]` 时，获准后用 `--accept-migrations` 重跑。
+3. 按 [独立初始化派发](references/init-agents.md) 先派只读 Agent，核对 API 和持久化能力。探测失败时先解决缺口，不把未知写成默认值。
+
+   已有项目先备份原入口和定制模板，再在隔离目录运行 **scripts/build_harness.sh**，生成骨架、模板和标准 Workflow。入口中的项目独有规则按升级约定保留到 **Rules**，构建脚本不会替你判断如何合并这些内容。
+
+   遇到 **[CONFIRM]** 迁移提示时，先取得批准，再加 **--accept-migrations** 重跑。
+
 4. 依次派 [入口](references/init-agent-entry.md)、[架构](references/init-agent-architecture.md) 初始化 Agent，按 upgrade-project.md 融合并核对项目规则及结构。AGENTS 作为统一入口；按实际平台连接入口，保留已有内容，冲突交用户决定。
-5. 按 init-agents.md 派发适用专题：独立任务并行，有依赖则等待；主 Agent 统一核对事实和索引。各 Agent 按 [文档生成指导](references/populate-project.md) 填项目事实；每个 Harness 必须包含术语表 `glossary.md`。空项目、局部更新及平台限制按派发规则处理，缺工具或环境明确报告。
-6. 按 [检查命令接入](references/populate-project.md#接入检查命令) 固定项目命令并验证，再运行 `scripts/setup_hooks.sh` 启用 Git hooks。未配置的检查只准备脚本、不启用；已有 Hook、core.hooksPath 和项目脚本按授权融合，不覆盖。
+5. 按 init-agents.md 派发适用专题：独立任务并行，有依赖则等待；主 Agent 统一核对事实和索引。各 Agent 按 [文档维护指导](references/init-project-docs.md) 填项目事实；每个 Harness 必须包含术语表 `glossary.md`。空项目、局部更新及平台限制按派发规则处理，缺工具或环境明确报告。
+6. 按 [检查命令接入](references/setup-checks.md) 固定项目命令并验证，再运行 `scripts/setup_hooks.sh` 启用 Git hooks。未配置的检查只准备脚本、不启用；已有 Hook、core.hooksPath 和项目脚本按授权融合，不覆盖。
 7. 按 [原生 Agent 接入](references/agent-setup.md) 配置并核验 Coder、Verifier、Reviewer、Executor；主 Agent 保留规划与编排。职责在项目 .harness/agent-roles.md 维护，平台配置绑定实际模型与权限。
-8. 项目融合结束后，以本次已确认的能力参数重跑 `scripts/build_harness.sh`，恢复标准 Workflow、同步模板；`[MERGE]` 缺口先处理，再派未参与本轮生成的独立 **Reviewer**，按 [交付审阅](references/upgrade-project.md#5-独立交付审阅) 核对最终产物与验证证据；主 Agent 修正后复审，再按下方“完成与反馈”报告结论。
+8. 在隔离候选中合入项目事实和定制，核对原项目未被改写。要检查重复生成是否稳定，另用尚未融合定制的隔离目录；**已融合的候选不得再由构建脚本覆盖。**
+
+   按已确认参数核验模板、Workflow、角色和工具结果，处理 **[MERGE]** 提示。再由未参与本轮生成的独立 **Reviewer**，按 [交付审阅](references/upgrade-project.md#5-独立交付审阅) 检查最终文件和验证证据。
+
+   问题修正并复审通过后，再核对候选与原项目的差异，按批准范围应用变更，最后报告实际结果。
+
 
 ## 完成与反馈
 
@@ -47,7 +57,7 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 - 规则、模板与项目事实已适配，引用有效，没有影响当前开发的关键占位或未决冲突；最终产物已通过独立交付审阅。
 - 当前开发必需的运行、构建、测试与静态检查入口可用；适用 Hook 按约定生效。确实不适用的项说明依据，缺工具或未执行不能算不适用。
 - 四个独立角色已通过当前平台实际调用核验；模型、权限及尚需重载的状态如实记录。
-- 检查入口已用通过、失败样例验证，相关错误能被发现；项目已有内容与历史保留。历史告警与接入故障按 [检查命令接入](references/populate-project.md#接入检查命令) 分开处理。
+- 检查入口已用通过、失败样例验证，相关错误能被发现；项目已有内容与历史保留。历史告警与接入故障按 [检查命令接入](references/setup-checks.md) 分开处理。
 
 缺少必要条件就报告 **“初始化／升级未完成”**，列明已完成内容、缺口、影响及下一步。用户决定暂缓必要接入时仍为未完成。未来发布、尚未涉及的集成环境等可按实际需求后续补充，不要求提前建设。
 
@@ -55,35 +65,14 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 
 不强制新增状态文件。难以从项目重建的决定或阻塞原因，可简记在已有记录或交接文件中；再次执行先核对事实，再继续缺口。
 
-## Workflow（工作流）
+## 生成后的项目流程
 
-### 产品工作流
+- **产品阶段**：Clarify → Design → Confirm，确定本次交付需求与 AC。
+- **开发阶段**：每个 Task 按 Clarify → Plan → Implement → Verify → Docs → Review → Submit 推进。
 
-| # | 步骤 | 产物 | 说明 |
-|---|---|---|---|
-| 01 | Clarify（澄清） | `01-requirements.md` §1 | 明确问题、目标与范围；用户确认要解决的问题 |
-| 02 | Design（方案设计） | `01-requirements.md` §2及原型引用 | 比较方案，按需用原型验证；用户选定方案，关键疑问已解决 |
-| 03 | Confirm（确认） | `01-requirements.md` §4、`02-acceptance-criteria.md` | 确认需求与验收条件（Acceptance Criteria，AC）；无影响目标或验收成立的待定项 |
+初始化或升级时，按 [AGENTS 模板第二章](assets/agents.md#二workflow) 接入完整流程；阶段职责、用户确认和返工规则以该章为准。项目接入后，从项目自己的 **AGENTS.md**、本地专题规则与阶段模板运行，日常任务无须安装本 Skill。下方“按需读取”供生成与升级使用。
 
-AI 将想法或外部资料整理为 Overview、Requirements 和 AC。外部链接在 Overview 追溯，缺口或冲突交用户确认；开发使用本轮已确认文档。产品 Overview 管本轮安排，各开发任务管自己的进度。只做产品设计时，Confirm 后结束。
-
-新需求的交互 HTML 原型放在本需求的 `product/prototype.html`，并在产品 Overview 的需求来源记录入口；已确认的旧原型保留原位。验收后原型保留为当时的设计依据。 接入项目时将此约定写入项目的 .harness/docs/clarify.md 产品阶段。
-
-### 开发工作流
-
-| # | 步骤 | 产物 | 说明 |
-|---|---|---|---|
-| 01 | Clarify（澄清） | `01-clarify.md` | 独立核验需求、AC 与实施条件，必要时确认任务拆分；无硬阻塞 |
-| 02 | Plan（计划） | `02-plan.md` | 列改动文件，设计测试和验收测试（Acceptance Test，AT），选定检查；用户批准方案与范围 |
-| 03 | Implement（实现） | `03-implement.md` | 按计划逐行为红绿循环，获取早期反馈；完成本次实现 |
-| 04 | Verify（检查） | `04-verify.md` | 执行适用检查与 AT，记录失败和复验；必要检查通过或例外明确获准 |
-| 05 | Docs（文档更新） | `05-docs.md` | 更新受影响的长期事实；无变化则说明不涉及 |
-| 06 | Review（独立验收） | `06-review.md` | 独立核对需求、规则和证据，修正复验后复盘；人工确认最终版本 |
-| 07 | Submit（提交） | `07-submit.md` | 按授权执行 commit、push 或 PR，报告实际结果 |
-
-产品 Clarify 明确问题，开发 Clarify 独立核验当前任务；产品确认不替代开发核验。开发的主要确认点是 Plan 批准和最终验收/提交授权；范围内连续推进，反馈与返工见 [AGENTS 模板](assets/agents.md) **§2.3**，用户确认见 **§2.6**。
-
-所有开发任务共用一套模板，按行为、范围和风险选择内容与检查；原型按实际不确定性选用。部署作为 Verify 的环境准备，优先复用 CI/CD；必要检查缺环境仍是阻塞。
+源 Skill 更新不会自动修改已生成项目。项目升级仍按 **upgrade-project.md** 核对候选差异与授权，不强制新增版本台账；用户主动调用其他可选工具不受此边界限制。
 
 ## 边界
 
@@ -94,15 +83,19 @@ AI 将想法或外部资料整理为 Overview、Requirements 和 AC。外部链�
 
 ## 按需读取
 
-只读取当前工作需要的材料；专题文档入口集中在文档生成指导中。
+只读取当前工作需要的材料；专题文档入口集中在文档维护指导中。
 
 | 当前工作 | 读取 |
 |---|---|
 | 融合旧内容、处理迁移或多项目归属 | [upgrade-project.md](references/upgrade-project.md) |
 | 初始化、升级或首次补齐项目文档，派发独立专题 Agent | [init-agents.md](references/init-agents.md) |
-| 填项目文档、统一术语、接入检查命令 | [populate-project.md](references/populate-project.md) |
+| 初始化／升级时填项目事实与术语 | [init-project-docs.md](references/init-project-docs.md) |
+| 接入检查工具、固定命令及 Git hooks | [setup-checks.md](references/setup-checks.md) |
 | 接入平台原生角色、核对模型与权限 | [agent-setup.md](references/agent-setup.md) |
 | 探测 API 和持久化能力 | [init-agent-detect.md](references/init-agent-detect.md) |
+| 接入完整流程、核对用户确认、返工及任务恢复规则 | [AGENTS 模板第二章](assets/agents.md#二workflow) |
+| 核对角色分工、并行派发与返工续接 | [agent-roles.md](assets/project/agent-roles.md) |
+| 核对阶段记录与完成检查 | [产品模板](assets/workflows/product/)、[开发模板](assets/workflows/development/) |
 | 产品澄清或开发独立核验 | [clarify.md](assets/project/docs/clarify.md)，按产品或开发部分读取 |
 | 设计行为改动的单元测试（Unit Test，UT） | [tdd.md](assets/project/docs/testing/tdd.md) |
 | 选择检查、处理失败及判断复验范围 | [verification.md](assets/project/docs/verification.md) |

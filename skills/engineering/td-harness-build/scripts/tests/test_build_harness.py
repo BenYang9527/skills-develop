@@ -32,6 +32,116 @@ class BuildHarnessTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         return result.stdout
 
+    def snapshot(self, project=None):
+        """Capture paths, types, modes and bytes, including dangling links."""
+        root = project or self.project
+        return {
+            str(path.relative_to(root)): (
+                path.lstat().st_mode,
+                str(path.readlink()) if path.is_symlink() else
+                path.read_bytes() if path.is_file() else None,
+            )
+            for path in root.rglob("*")
+        }
+
+    def test_fresh_product_layout_has_only_current_forms(self):
+        self.build()
+        folder = self.project / ".harness/templates/product"
+        self.assertEqual({path.name for path in folder.iterdir()}, {
+            "00-overview.md", "01-discussion.md", "02-delivery-requirements.md",
+            "03-acceptance-criteria.md", "acceptance.feature",
+        })
+        self.assertFalse((self.project / ".harness/docs/product-state").exists())
+        for name in ("01-prd.md", "02-backlog.md", "03-discussion-pool.md"):
+            self.assertTrue((self.project / ".harness/product" / name).is_file())
+        self.assertFalse((self.project / ".harness/product/tmp-disscussion.md").exists())
+
+    def test_global_product_documents_keep_existing_content(self):
+        originals = {
+            ".harness/product/01-prd.md": "Confirmed product requirements\n",
+            ".harness/product/02-backlog.md": "Custom backlog with external links\n",
+            ".harness/product/03-discussion-pool.md": "Detailed deferred discussion\n",
+        }
+        for relative, content in originals.items():
+            path = self.project / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content)
+        self.build()
+        for relative, content in originals.items():
+            self.assertEqual((self.project / relative).read_text(), content)
+
+    def test_each_legacy_product_path_blocks_all_writes_without_approval(self):
+        for index, relative in enumerate((
+            ".harness/templates/product/01-requirements.md",
+            ".harness/templates/product/02-acceptance-criteria.md",
+            ".harness/docs/product-state",
+        )):
+            with self.subTest(relative=relative):
+                project = self.project / str(index)
+                legacy = project / relative
+                legacy.parent.mkdir(parents=True)
+                if relative.endswith(".md"):
+                    legacy.write_bytes(b"Custom legacy content\r\n")
+                else:
+                    legacy.mkdir()
+                    (legacy / "prd.md").write_bytes(b"Actual product facts\n")
+                before = self.snapshot(project)
+                result = subprocess.run(
+                    ["bash", str(SKILL / "scripts/build_harness.sh"), str(project)],
+                    capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+                self.assertIn("[MERGE] Existing layout retained: " + relative, result.stdout)
+                self.assertEqual(self.snapshot(project), before)
+
+    def test_approved_product_migration_retains_old_documents_and_tasks(self):
+        originals = {
+            ".harness/templates/product/01-requirements.md": b"Old requirements\r\n",
+            ".harness/templates/product/02-acceptance-criteria.md": b"Old AC\n",
+            ".harness/docs/product-state/prd.md": b"Real current facts\n",
+            ".harness/docs/product-state/backlog.md": b"Unscheduled ideas\n",
+            ".harness/plans/old/product/01-requirements.md": b"Historical decisions\n",
+            ".harness/plans/old/product/02-acceptance-criteria.md": b"Historical AC\n",
+        }
+        for relative, content in originals.items():
+            path = self.project / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+        output = self.build("--accept-migrations")
+        self.assertIn("[MERGE] Existing layout retained: .harness/docs/product-state", output)
+        for relative, content in originals.items():
+            self.assertEqual((self.project / relative).read_bytes(), content)
+        for name in ("01-discussion.md", "02-delivery-requirements.md", "03-acceptance-criteria.md"):
+            self.assertTrue((self.project / ".harness/templates/product" / name).is_file())
+        self.assertEqual({path.name for path in (self.project / ".harness/docs/product-state").iterdir()},
+                         {"prd.md", "backlog.md"})
+
+    def test_isolated_generation_preserves_custom_bytes_and_historical_numbering(self):
+        original = self.project / "original"
+        custom = original / ".harness/templates/product/00-overview.md"
+        custom.parent.mkdir(parents=True)
+        custom.write_bytes(b"# Custom overview\r\nProject-specific approval rule\r\n")
+        history = original / ".harness/plans/old/product/01-requirements.md"
+        history.parent.mkdir(parents=True)
+        history.write_bytes(b"Original approved requirements\r\n")
+        before = self.snapshot(original)
+        candidate = self.project / "candidate"
+        candidate.mkdir()
+        self.build(project=candidate)
+        self.assertEqual(self.snapshot(original), before)
+        # Demonstrate the caller-owned merge in isolation; the builder does not merge semantics.
+        merged = candidate / ".harness/templates/product/00-overview.md"
+        merged.write_bytes(merged.read_bytes() + b"\n" + custom.read_bytes())
+        self.assertIn(custom.read_bytes(), merged.read_bytes())
+        self.assertEqual(self.snapshot(original), before)
+        self.assertFalse((original / ".harness/plans/old/product/01-discussion.md").exists())
+
+    def test_current_generation_is_byte_stable_on_second_run(self):
+        self.build()
+        before = self.snapshot()
+        self.build()
+        self.assertEqual(self.snapshot(), before)
+
     def test_missing_entry_copies_template(self):
         self.build()
         self.assertEqual(self.entry.read_bytes(), TEMPLATE)

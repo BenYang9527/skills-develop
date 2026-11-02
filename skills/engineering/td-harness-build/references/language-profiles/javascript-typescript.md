@@ -11,6 +11,7 @@
 | 认知复杂度 | [eslint-plugin-sonarjs](https://github.com/SonarSource/SonarJS) 4.2.2 | 配置 sonarjs/cognitive-complexity 为 15；TS parser 按项目匹配 |
 | CRAP | [poly-crap](https://github.com/drew-simmons/poly-crap) 0.8.2 | 与 Python 共用工具，读取覆盖文件；生态较小，作为首版选择，不称行业标准 |
 | 变异 | [StrykerJS](https://stryker-mutator.io/docs/stryker-js/introduction/) 10.0.0 | 匹配现有 runner；该评估版本需 Node ≥22，不为安装它擅自升级项目 |
+| 重复检测 | [jscpd共享接入](../setup-checks.md#4-重复代码检测jscpd) | 版本、范围与验证只维护在共享指导；已有有效工具继续沿用 |
 
 ## 命令与配置
 

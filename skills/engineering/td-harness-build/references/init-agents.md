@@ -7,9 +7,14 @@
 1. **探测**：先派只读 Agent 执行 [能力探测](init-agent-detect.md)。主 Agent 核对证据，取得 **HAS_API / HAS_DB** 后运行构建脚本；未知或探测失败先解决缺口。
 2. **入口 → 架构**：骨架就绪后，依次派 [入口 Agent](init-agent-entry.md)、[架构 Agent](init-agent-architecture.md)。主 Agent 读取并核对两份产物，确认项目规则及结构，再交给专题 Agent 使用。入口索引此时只引用实际已有文件，最终由主 Agent 收口。
 3. **专题初始化**：按下表派发本次适用的专题；相互独立、写入范围不交叉的任务并行。依赖的产物尚未完成核验时先等待，按平台并发上限分批，不要求同时启动全部角色。
-4. **汇总**：全部返回后，主 Agent 核对事实、项目内容保留、跨文档引用、命令归属和索引，处理冲突；汇总各专题结果与缺口，再继续 Hook 和原生开发角色接入。
+4. **汇总**：主 Agent 完成以下核对，再继续 Hook 和原生开发角色接入。
 
-已有项目初始化或首次补齐时，适用专题使用独立 Agent。空项目无代码时，入口由主 Agent 填明现状，其余专题只保留骨架和缺口，不派 Agent 编造内容。单专题升级或 **05 Docs** 增量维护可直接复用专题指令，不为局部改动重跑整批。
+   - **产品资料**：按 [clarify.md §2.1](../assets/project/docs/clarify.md#21-各文件存什么) 填写或更新 PRD 与 Backlog。只记录已有依据和确认决定，未知项保留待确认。
+   - **质量门槛**：核对项目已有门槛，将适用值及获准差异写入 **.harness/docs/verification.md §2**，并与实际工具配置对照。专题 Agent 返回依据和冲突，不越界修改配置。
+   - **整体一致性**：核对事实、项目内容保留、跨文档引用、命令归属和索引，处理冲突，汇总结果与缺口。
+
+
+已有项目初始化或首次补齐时，适用专题使用独立 Agent。空项目无代码时，入口由主 Agent 填明现状，其余专题只保留骨架和缺口，不派 Agent 编造内容。单专题升级可直接复用专题指令，不为局部改动重跑整批。项目生成后的日常任务按项目 AGENTS、角色规则与本地阶段模板执行。
 
 平台不支持独立 Agent，或项目限制子 Agent 写入时，如实说明：能独立读取的返回事实与候选内容，由主 Agent 按相同边界写入；无法独立执行的项报告未完成或由用户决定串行替代，不把主 Agent 自检称为多 Agent 初始化。
 
@@ -33,7 +38,6 @@
 |---|---|---|
 | [init-agent-entry.md](init-agent-entry.md) | 项目 **AGENTS.md** | 主 Agent 确认目标、已有规则和修改边界；专题结束后主 Agent 再核对索引 |
 | [init-agent-architecture.md](init-agent-architecture.md) | **architecture.md** | 入口核对完成；有代码或已确认的技术方案，未实现部分明确标记 |
-| [init-agent-product.md](init-agent-product.md) | **product-state/** | 有现状依据；不代替用户确认新需求与 AC |
 | [init-agent-dependencies.md](init-agent-dependencies.md) | **dependencies.md** | 入口、架构已核对；依据真实调用与集成 |
 | [init-agent-contracts.md](init-agent-contracts.md) | **contracts/** | **HAS_API=true**；字段定义引用实际契约 |
 | [init-agent-data.md](init-agent-data.md) | **data/database.md** | **HAS_DB=true**；结构定义引用权威来源 |

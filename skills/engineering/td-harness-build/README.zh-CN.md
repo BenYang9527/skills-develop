@@ -36,6 +36,11 @@ $td-harness-build
 
 ## 三、工作流
 
+1. **产品阶段**：讨论需求和方案，确认交付需求与 AC 后结束。开发可以在另一个会话启动。
+2. **开发启动**：确认整体方案，并明确允许启动哪些 Task；可以只启动其中一个。
+3. **Task 执行**：先做开发 Clarify；需要用户作出关键决定时暂停等待回答。核验通过后细化 Plan，范围内计划就绪即继续实现，不逐份等待 Plan 批准。
+4. **提交**：验证与独立审查通过后，按有效授权执行提交；合并和发布分别核对授权。
+
 [![产品与开发工作流](assets/workflow-overview.svg)](assets/workflow-overview.svg)
 
 <details>
@@ -45,8 +50,12 @@ $td-harness-build
 
 </details>
 
-### 产品任务与开发任务
+### 并行执行
+
+仅启动已授权且依赖就绪的 Task。上层看任务之间的依赖，下层展开一个 Task 内部的实现分工。
 
 <p align="center">
-  <a href="assets/task-relationships.svg"><img src="assets/task-relationships.svg" alt="一个产品任务对应一个或多个开发任务" width="900"></a>
+  <a href="assets/task-relationships.svg"><img src="assets/task-relationships.svg" alt="Task 之间的并行与依赖，以及 Task 内部的实现并行与汇合" width="1200"></a>
 </p>
+
+支持一个会话协调多个 Task，也支持多个终端分别负责 Task。具体分工与资源隔离见 [Agent 职责](assets/project/agent-roles.md#1-分工)。
