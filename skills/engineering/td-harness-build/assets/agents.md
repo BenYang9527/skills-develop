@@ -322,3 +322,4 @@ test ! -e "$task_dir" && test ! -L "$task_dir" && cp -R "$template_dir" "$task_d
 | 7 | **禁止硬编码凭据（Hardcoded Credentials）。** 包括密钥、Token 和密码。 |
 | 8 | **必须校验外部输入（Input Validation）。** 输出按场景转义（Contextual Output Escaping）。 |
 | 9 | **加密必须使用标准库（Standard Library）。** |
+| 10 | **严禁碎片化派发 Coder 或绕过返工上限。** 完整委托与三轮限制按 [Agent 分工 §2](.harness/agent-roles.md#2-派发与返工) 执行。 |
