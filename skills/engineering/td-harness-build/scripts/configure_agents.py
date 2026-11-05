@@ -9,10 +9,7 @@ import sys
 import tomllib
 
 ROLES = {
-    "coder": ("Coder", "Implement approved plans and tests; report changes and evidence."),
-    "verifier": ("Verifier", "Verify the current implementation against selected checks; report failures and evidence."),
-    "reviewer": ("Reviewer", "Independently review requirements, changes, and verification evidence."),
-    "executor": ("Executor", "Update assigned documents and execute explicitly authorized mechanical operations."),
+    "reviewer": ("Reviewer", "Independently verify behavior and review requirements, changes, and evidence."),
 }
 
 
@@ -33,10 +30,12 @@ def render(platform, role, model, effort):
     label, description = ROLES[role]
     name = f"harness-{role}"
     instructions = (
-        f"You are the {label}. Before acting, read project AGENTS.md and "
-        f".harness/agent-roles.md, then follow the {label} responsibilities and shared handoff rules. "
-        "Read the current task sources identified by the parent. If required guidance is missing, "
-        "report the gap before acting. Work only within the assigned scope and authorization."
+        "You are the project Reviewer for the assigned Task. Before acting, read project "
+        "AGENTS.md for workflow and authorization, then .harness/agent-roles.md for the "
+        "authoritative Reviewer responsibilities, write boundaries, and handoff rules. "
+        "Read the current Task sources identified by the parent and follow the applicable "
+        "project verification and review guidance linked from those documents. "
+        "If either file is missing or unreadable, report the blocker before acting."
     )
     quote = lambda text: json.dumps(text, ensure_ascii=False)
     suffix = "toml" if platform == "codex" else "md"
@@ -65,10 +64,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
     parser.add_argument("--platform", choices=("codex", "claude"), required=True)
-    parser.add_argument("--strong-model", type=value, required=True)
-    parser.add_argument("--economy-model", type=value, required=True)
-    parser.add_argument("--strong-effort", type=value)
-    parser.add_argument("--economy-effort", type=value)
+    parser.add_argument("--reviewer-model", dest="reviewer_model", type=value, required=True)
+    parser.add_argument("--reviewer-effort", dest="reviewer_effort", type=value)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     root = Path(os.path.abspath(args.project))
@@ -84,9 +81,8 @@ def main():
     pending = []
     conflicts = []
     for role in ROLES:
-        strong = role in ("verifier", "reviewer")
-        model = args.strong_model if strong else args.economy_model
-        effort = args.strong_effort if strong else args.economy_effort
+        model = args.reviewer_model
+        effort = args.reviewer_effort
         name, content = render(args.platform, role, model, effort)
         path = destination / name
         if path.is_symlink() or (path.exists() and (not path.is_file() or path.read_text() != content)):

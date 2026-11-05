@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
-<title id="title">两层并行：任务之间与任务内部</title><desc id="desc">只有已获授权且依赖就绪的任务才能启动。A、B 可并行；C 等待 A 的所需成果合入集成分支。Task 内仅 Implement 分工并行，代码汇合后统一执行 Verify、Docs、Review、Submit。</desc>
+<title id="title">两层并行：任务之间与任务内部</title><desc id="desc">示意图；流程以 AGENTS.md 为准。Owner 直接实施，Reviewer 验证与审查。开发顺序：Clarify、Plan、Implement、Docs、Review、Submit。</desc>
 <style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;fill:#203b5b;font-size:21px}.heading{font-size:23px;font-weight:600}.small{font-size:17px;fill:#536f8f}.node{fill:#eff6ff;stroke:#8aacd3;stroke-width:1.5}.line{fill:none;stroke:#6886a7;stroke-width:1.7;marker-end:url(#arrow)}</style>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#6886a7" stroke-width="1.5"/></marker></defs>
 <rect width="1200" height="780" fill="white"/>
@@ -35,8 +35,8 @@
 <rect x="630" y="525" width="220" height="90" rx="9" class="node"/>
 <text x="740.0" y="577.0" class="" text-anchor="middle">汇合到任务分支</text>
 <rect x="925" y="515" width="225" height="110" rx="9" class="node"/>
-<text x="1037.5" y="561.0" class="" text-anchor="middle">Verify → Docs</text>
-<text x="1037.5" y="593.0" class="" text-anchor="middle">→ Review → Submit</text>
+<text x="1037.5" y="561.0" class="" text-anchor="middle">Docs → Review</text>
+<text x="1037.5" y="593.0" class="" text-anchor="middle">→ Submit</text>
 <path d="M270 570 C307 570 300 507 345 507" class="line"/>
 <path d="M270 570 C307 570 300 642 345 642" class="line"/>
 <path d="M550 507 C590 507 587 570 630 570" class="line"/>

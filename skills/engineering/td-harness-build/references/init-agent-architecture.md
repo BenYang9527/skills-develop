@@ -10,4 +10,4 @@
 
 唯一骨架和专题规则为 [architecture.md](../assets/project/docs/architecture.md)。按各章节说明定位、模块、流程、决策及适用的部署与公共机制；README 只作来源，不全文复制。外部集成明细引用 dependencies.md。
 
-图、实际证据与局部日期按 [05 Docs §3](../assets/workflows/development/05-docs.md#3-一致性核对) 核对。新文件按模板生成，已有文件按升级规则融合；报告已核验范围及缺口。
+图、实际证据与局部日期按 [04 Docs §3](../assets/workflows/development/04-docs.md#3-一致性核对) 核对。新文件按模板生成，已有文件按升级规则融合；报告已核验范围及缺口。

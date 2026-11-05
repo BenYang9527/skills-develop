@@ -50,4 +50,4 @@
 | [init-agent-glossary.md](init-agent-glossary.md) | **glossary.md** | 每个 Harness 必备；无有效术语时写“暂无” |
 | [init-agent-failures.md](init-agent-failures.md) | **failures.md** | 仅使用已授权的相关历史；无证据时不编造记录 |
 
-初始化 Agent 是本轮文档任务，不要求为各专题安装永久原生角色。后续开发的 **Coder / Verifier / Reviewer / Executor** 按 [agent-setup.md](agent-setup.md) 另行接入与核验。
+初始化 Agent 是本轮文档任务，不要求为各专题安装永久原生角色。后续开发的 **Owner 与独立 Reviewer** 按 [agent-setup.md](agent-setup.md) 另行接入与核验。

@@ -30,7 +30,7 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 
 ## 工作流
 
-1. 读取目标项目的 AGENTS、Harness、Git 状态、分支及已有规则。多项目仓库先确定目标目录。
+1. 核对目标项目的 AGENTS.md、Git 状态和当前分支。多项目仓库先确定目标目录。
 2. 按 [upgrade-project.md](references/upgrade-project.md) 判断文件归属和修改边界。需要确认的迁移整批列出；获准后连续执行，出现新的越界操作才停止。
 3. 按 [独立初始化派发](references/init-agents.md) 先派只读 Agent，核对 API 和持久化能力。探测失败时先解决缺口，不把未知写成默认值。
 
@@ -41,7 +41,7 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 4. 依次派 [入口](references/init-agent-entry.md)、[架构](references/init-agent-architecture.md) 初始化 Agent，按 upgrade-project.md 融合并核对项目规则及结构。AGENTS 作为统一入口；按实际平台连接入口，保留已有内容，冲突交用户决定。
 5. 按 init-agents.md 派发适用专题：独立任务并行，有依赖则等待；主 Agent 统一核对事实和索引。各 Agent 按 [文档维护指导](references/init-project-docs.md) 填项目事实；每个 Harness 必须包含术语表 `glossary.md`。空项目、局部更新及平台限制按派发规则处理，缺工具或环境明确报告。
 6. 按 [检查命令接入](references/setup-checks.md) 固定项目命令并验证，再运行 `scripts/setup_hooks.sh` 启用 Git hooks。未配置的检查只准备脚本、不启用；已有 Hook、core.hooksPath 和项目脚本按授权融合，不覆盖。
-7. 按 [原生 Agent 接入](references/agent-setup.md) 配置并核验 Coder、Verifier、Reviewer、Executor；主 Agent 保留规划与编排。职责在项目 .harness/agent-roles.md 维护，平台配置绑定实际模型与权限。
+7. 按 [原生 Agent 接入](references/agent-setup.md) 配置并核验项目角色，绑定实际模型与权限。配置前必读 [角色职责](assets/project/agent-roles.md)：Owner 指本 Task 的交付负责人，其职责、与主 Agent 的关系及 Reviewer 边界均以该文件为准。
 8. 在隔离候选中合入项目事实和定制，核对原项目未被改写。要检查重复生成是否稳定，另用尚未融合定制的隔离目录；**已融合的候选不得再由构建脚本覆盖。**
 
    按已确认参数核验模板、Workflow、角色和工具结果，处理 **[MERGE]** 提示。再由未参与本轮生成的独立 **Reviewer**，按 [交付审阅](references/upgrade-project.md#5-独立交付审阅) 检查最终文件和验证证据。
@@ -56,7 +56,7 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 - 项目方向、技术栈和运行方式已明确，适用的最小工程与 Git 基础已就绪。
 - 规则、模板与项目事实已适配，引用有效，没有影响当前开发的关键占位或未决冲突；最终产物已通过独立交付审阅。
 - 当前开发必需的运行、构建、测试与静态检查入口可用；适用 Hook 按约定生效。确实不适用的项说明依据，缺工具或未执行不能算不适用。
-- 四个独立角色已通过当前平台实际调用核验；模型、权限及尚需重载的状态如实记录。
+- 独立 Reviewer 已通过当前平台实际调用核验，能执行验证并审查，Owner 分工明确；模型、权限及尚需重载的状态如实记录。
 - 检查入口已用通过、失败样例验证，相关错误能被发现；项目已有内容与历史保留。历史告警与接入故障按 [检查命令接入](references/setup-checks.md) 分开处理。
 
 缺少必要条件就报告 **“初始化／升级未完成”**，列明已完成内容、缺口、影响及下一步。用户决定暂缓必要接入时仍为未完成。未来发布、尚未涉及的集成环境等可按实际需求后续补充，不要求提前建设。
@@ -68,9 +68,9 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 ## 生成后的项目流程
 
 - **产品阶段**：Clarify → Design → Confirm，确定本次交付需求与 AC。
-- **开发阶段**：每个 Task 按 Clarify → Plan → Implement → Verify → Docs → Review → Submit 推进。
+- **开发阶段**：执行顺序见下方 AGENTS 模板第二章，不在本入口另定义阶段顺序。
 
-初始化或升级时，按 [AGENTS 模板第二章](assets/agents.md#二workflow) 接入完整流程；阶段职责、用户确认和返工规则以该章为准。项目接入后，从项目自己的 **AGENTS.md**、本地专题规则与阶段模板运行，日常任务无须安装本 Skill。下方“按需读取”供生成与升级使用。
+初始化或升级时，按 [AGENTS 模板第二章](assets/agents.md#二workflow) 接入完整流程；阶段顺序与用户确认以该章为准；角色职责、交接与返工轮次以 [角色职责模板](assets/project/agent-roles.md) 为准。项目接入后，从项目自己的 **AGENTS.md**、本地专题规则与阶段模板运行，日常任务无须安装本 Skill。下方“按需读取”供生成与升级使用。
 
 源 Skill 更新不会自动修改已生成项目。项目升级仍按 **upgrade-project.md** 核对候选差异与授权，不强制新增版本台账；用户主动调用其他可选工具不受此边界限制。
 
@@ -83,7 +83,7 @@ description: 为 AI Coding 项目初始化、迁移或升级协作规则、项�
 
 ## 按需读取
 
-只读取当前工作需要的材料；专题文档入口集中在文档维护指导中。
+只读取当前步骤需要的章节；下表是条件路由，不是必读清单。链接不触发递归读取，按当前问题展开；专题文档入口集中在文档维护指导中。
 
 | 当前工作 | 读取 |
 |---|---|

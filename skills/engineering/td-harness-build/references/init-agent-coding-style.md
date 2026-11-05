@@ -26,7 +26,7 @@
 
 ### 2.2 规则与接入
 
-工具登记、可读性、参数提示、语义审查与例外规则按 [coding-style.md](../assets/project/docs/coding-style.md)；固定命令与数值门槛的归属按 [05 Docs §1.2](../assets/workflows/development/05-docs.md#12-内容与职责)。
+工具登记、可读性、参数提示、语义审查与例外规则按 [coding-style.md](../assets/project/docs/coding-style.md)；固定命令与数值门槛的归属按 [04 Docs §1.2](../assets/workflows/development/04-docs.md#12-内容与职责)。
 
 重复检测接入方法见 [setup-checks.md §4](setup-checks.md#4-重复代码检测jscpd)，执行参数依据实际配置。按语言和授权适配参数等检查，写清命令与配置，不预设所有语言共用工具。工具安装、配置修改与既有代码重构分别核对授权。
 

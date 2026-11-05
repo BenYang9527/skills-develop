@@ -10,7 +10,7 @@
 
 按 [local-dev.md](../assets/project/docs/devops/local-dev.md) 填本地安装、配置、启动、调试与交付入口；按 [release.md](../assets/project/docs/devops/release.md) 填发布与恢复。格式、缺口、命令来源及发布授权规则由模板维护；不为填文档搭建环境。
 
-命令执行与记录按 [05 Docs](../assets/workflows/development/05-docs.md) 的权限与核验方法。日志引用 logging.md，测试引用测试规范。
+命令执行与记录按 [04 Docs](../assets/workflows/development/04-docs.md) 的权限与核验方法。日志引用 logging.md，测试引用测试规范。
 
 ## 3. 升级保留
 

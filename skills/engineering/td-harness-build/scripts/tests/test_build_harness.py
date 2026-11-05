@@ -56,6 +56,20 @@ class BuildHarnessTests(unittest.TestCase):
             self.assertTrue((self.project / ".harness/product" / name).is_file())
         self.assertFalse((self.project / ".harness/product/tmp-disscussion.md").exists())
 
+    def test_development_has_one_acceptance_record_and_contiguous_numbers(self):
+        self.build()
+        folder = self.project / ".harness/templates/development"
+        self.assertEqual({p.name for p in folder.iterdir()}, {
+            "00-overview.md", "01-clarify.md", "02-plan.md", "03-implement.md",
+            "04-docs.md", "05-review.md", "06-submit.md",
+        })
+        review = (folder / "05-review.md").read_text()
+        for topic in ("验证准备", "UT 与覆盖率", "AT 验收结果", "审阅发现", "授权核对"):
+            self.assertIn(topic, review)
+        overview = (folder / "00-overview.md").read_text()
+        self.assertNotIn("04-verify.md", overview)
+        self.assertNotIn("Verify", overview)
+
     def test_global_product_documents_keep_existing_content(self):
         originals = {
             ".harness/product/01-prd.md": "Confirmed product requirements\n",

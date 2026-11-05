@@ -36,4 +36,4 @@ if [[ "$status" -ne 0 ]]; then
   printf '[BLOCK] Project checks failed (exit %s). Fix the reported error and rerun.\n' "$status" >&2
   exit "$status"
 fi
-printf '%s\n' '[OK] Configured project checks passed; task Verify remains required.'
+printf '%s\n' '[OK] Configured project checks passed; task Review remains required.'

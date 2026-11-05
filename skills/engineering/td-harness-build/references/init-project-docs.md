@@ -6,7 +6,7 @@
 
 按 [upgrade-project.md](upgrade-project.md) 确认内容归属、融合和迁移授权，从 **assets/project/** 复制固定骨架；已有内容按升级规则保留。专题派发按 [init-agents.md](init-agents.md)。
 
-生成后的日常维护方法由项目本地 **05 Docs** 模板及专题文档提供。生成时同样遵循 [05-docs.md §1、§3](../assets/workflows/development/05-docs.md) 的证据、唯一来源、权限、核对日期和索引规则；专题规则按 §2 定位对应资产，不在生成指导中另设一份。
+生成后的日常维护方法由项目本地 **04 Docs** 模板及专题文档提供。生成时同样遵循 [04-docs.md §1、§3](../assets/workflows/development/04-docs.md) 的证据、唯一来源、权限、核对日期和索引规则；专题规则按 §2 定位对应资产，不在生成指导中另设一份。
 
 项目首次引入 API 或数据库时，缺少的规范骨架在获准的初始化或升级中补齐；日常 Docs 阶段按已有文件维护，不承担新建专题文件。
 
