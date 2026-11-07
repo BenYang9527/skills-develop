@@ -64,8 +64,14 @@ class BuildHarnessTests(unittest.TestCase):
             "04-docs.md", "05-review.md", "06-submit.md",
         })
         review = (folder / "05-review.md").read_text()
-        for topic in ("验证准备", "UT 与覆盖率", "AT 验收结果", "审阅发现", "授权核对"):
+        for topic in ("02-plan.md §6.1", ".harness/docs/verification.md §1–2",
+                      "verification.md §3.2", "实际验证", "审阅发现", "授权核对"):
             self.assertIn(topic, review)
+        plan = (folder / "02-plan.md").read_text()
+        self.assertIn("### 6.1 AC 与 AT 对应", plan)
+        verification = (self.project / ".harness/docs/verification.md").read_text()
+        for topic in ("环境准备", "UT 覆盖率", "证据记录"):
+            self.assertIn(topic, verification)
         overview = (folder / "00-overview.md").read_text()
         self.assertNotIn("04-verify.md", overview)
         self.assertNotIn("Verify", overview)

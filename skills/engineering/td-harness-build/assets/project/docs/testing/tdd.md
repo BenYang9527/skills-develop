@@ -31,7 +31,7 @@ TDD 的核心是 red → green 循环。本文是让这个循环产出“值得�
 - **Red before green（先红后绿）**：先写失败测试，再只写让该测试通过的最少代码。不要提前猜未来测试，也不要加入投机功能。
 - **One slice at a time（一次一个切片）**：每个 cycle 只处理一个 seam、一个测试、一个最小实现。
 
-以上循环由 Task Owner 连续完成，不将 Red 与 Green 拆成跨 Agent 派发；独立验收与三轮上限见 [Agent 分工 §2](../../agent-roles.md#2-派发与返工)。
+以上循环由 Task Owner 连续完成，不将 Red 与 Green 拆成跨 Agent 派发；独立验收与返工见 [Agent 分工 §2](../../agent-roles.md#2-派发与返工)。
 
 ### Refactor（重构，可选）
 
@@ -160,7 +160,7 @@ function processPayment(order) {
 const api = {
   getUser: (id) => fetch(`/users/${id}`),
   getOrders: (userId) => fetch(`/users/${userId}/orders`),
-  createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
+  createOrder: (data) => fetch("/orders", { method: "POST", body: data }),
 };
 
 // BAD：mock 内部还需要条件分支
