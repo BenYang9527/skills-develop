@@ -6,8 +6,6 @@ import math
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-PHASES = [('澄清', 'Clarify'), ('计划', 'Plan'), ('实现', 'Implement'),
-          ('验证', 'Verify'), ('文档', 'Docs'), ('审查', 'Review'), ('提交', 'Submit')]
 TIME_LABELS = ['总跨度', '可观察执行时间', '阶段窗口合计']
 
 
@@ -67,8 +65,16 @@ def validate(data):
         text(data[key])
     if [r['label'] for r in data['times']] != TIME_LABELS:
         raise ValueError('times must contain the three documented labels in order')
-    if [r['number'] for r in data['phases']] != [f'{n:02}' for n in range(1, 8)]:
-        raise ValueError('phases must contain 01 through 07 in order')
+    if not isinstance(data['phases'], list):
+        raise ValueError('phases must be an array')
+    phase_numbers = set()
+    for row in data['phases']:
+        number = text(row.get('number', '')).strip()
+        if not number or number in phase_numbers:
+            raise ValueError('phase numbers must be non-empty and unique')
+        if not text(row.get('label', '')).strip():
+            raise ValueError('each phase must have a non-empty label')
+        phase_numbers.add(number)
     for row in data['times'] + data['phases']:
         seconds(row['seconds'])
         text(row['note'])
@@ -128,11 +134,13 @@ def render(data):
             elements.append(f'<text x="{x+17}" y="{card_y+78+i*24}" font-size="15" '
                             f'fill="#61718a">{escape(line)}</text>')
     y = card_y + card_height + 10
-    heading('01–07 阶段窗口')
-    paragraph('条长比较已知阶段窗口；未知不补零，条长不是全任务占比。', 16, '#61718a')
+    heading('阶段窗口')
+    phase_note = ('条长比较已知阶段窗口，未知项以虚线表示。'
+                  if data['phases'] else '未取得任务阶段清单。')
+    paragraph(phase_note, 16, '#61718a')
     maximum = max((row['seconds'] or 0 for row in data['phases']), default=0)
-    for row, (zh, en) in zip(data['phases'], PHASES):
-        paragraph(f"{row['number']}  {zh} {en}    {duration(row['seconds'])}", 20, bold=True)
+    for row in data['phases']:
+        paragraph(f"{row['number']}  {row['label']}    {duration(row['seconds'])}", 20, bold=True)
         elements.append(f'<rect x="52" y="{y-10}" width="1036" height="10" rx="5" '
                         'fill="#e8edf4"/>')
         if row['seconds'] is None:

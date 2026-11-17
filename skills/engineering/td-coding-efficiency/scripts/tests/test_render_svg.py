@@ -34,7 +34,7 @@ SVG = "{http://www.w3.org/2000/svg}"
 
 
 def facts():
-    """Small valid report with literal contract labels and seven unique stages."""
+    """Small valid report with project-supplied stage labels."""
     return {
         "title": "任务效率",
         "scope": "仅本轮交付",
@@ -45,8 +45,8 @@ def facts():
             {"label": "阶段窗口合计", "seconds": 0, "note": "已观察为零"},
         ],
         "phases": [
-            {"number": f"{number:02}", "seconds": None, "note": "阶段时间未知"}
-            for number in range(1, 8)
+            {"number": f"{number:02}", "label": label, "seconds": None, "note": "阶段时间未知"}
+            for number, label in enumerate(("澄清 Clarify", "实现 Implement", "审查 Review"), 1)
         ],
         "parallel": [],
         "usage": [],
@@ -239,31 +239,35 @@ class TextAndXmlTests(unittest.TestCase):
 
 
 class ReportStructureTests(unittest.TestCase):
-    def test_each_stage_number_and_name_is_rendered_once_in_order(self):
-        root = parsed(facts())
-        rows = visible_text(root)
-        expected = [
-            "01  澄清 Clarify    未知", "02  计划 Plan    未知",
-            "03  实现 Implement    未知", "04  验证 Verify    未知",
-            "05  文档 Docs    未知", "06  审查 Review    未知",
-            "07  提交 Submit    未知",
-        ]
-        self.assertEqual([line for line in rows if line in expected], expected)
-
-    def test_missing_duplicate_extra_and_reordered_stages_are_rejected(self):
-        for mutation in ("missing", "duplicate", "extra", "reordered"):
-            with self.subTest(mutation=mutation):
+    def test_stage_labels_and_count_follow_the_report_data(self):
+        six = ("澄清 Clarify", "计划 Plan", "实现 Implement", "文档 Docs", "审查 Review", "提交 Submit")
+        seven = six[:3] + ("验证 Verify",) + six[3:]
+        for labels in (six, seven, ("调研", "交付")):
+            with self.subTest(labels=labels):
                 data = facts()
-                if mutation == "missing":
-                    data["phases"].pop(3)
-                elif mutation == "duplicate":
-                    data["phases"][3]["number"] = "03"
-                elif mutation == "extra":
-                    data["phases"].append({"number": "08", "seconds": 0, "note": ""})
-                else:
-                    data["phases"][0], data["phases"][1] = data["phases"][1], data["phases"][0]
-                with self.assertRaises(ValueError):
-                    renderer.render(data)
+                data["phases"] = [
+                    {"number": f"{index:02}", "label": label, "seconds": None, "note": ""}
+                    for index, label in enumerate(labels, 1)
+                ]
+                rows = visible_text(parsed(data))
+                headings = [line for line in rows if line[:2].isdigit()]
+                expected = [f"{index:02}  {label}    未知" for index, label in enumerate(labels, 1)]
+                self.assertEqual(headings, expected)
+
+    def test_unknown_stage_list_displays_a_gap(self):
+        data = facts()
+        data["phases"] = []
+        self.assertIn("未取得任务阶段清单。", visible_text(parsed(data)))
+
+    def test_duplicate_stage_numbers_and_missing_labels_are_rejected(self):
+        data = facts()
+        data["phases"][1]["number"] = "01"
+        with self.assertRaisesRegex(ValueError, "unique"):
+            renderer.render(data)
+        data = facts()
+        del data["phases"][0]["label"]
+        with self.assertRaisesRegex(ValueError, "label"):
+            renderer.render(data)
 
     def test_time_labels_cannot_be_missing_duplicated_or_reordered(self):
         for labels in (("总跨度", "阶段窗口合计"), ("总跨度",) * 3,
@@ -306,7 +310,7 @@ class CliOutputProtectionTests(unittest.TestCase):
 
     def test_invalid_input_cannot_touch_the_output(self):
         data = facts()
-        data["phases"].pop()
+        del data["phases"][0]["label"]
         source = Mock()
         source.read_text.return_value = json.dumps(data)
         output = Mock()

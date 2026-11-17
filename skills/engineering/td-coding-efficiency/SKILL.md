@@ -1,11 +1,11 @@
 ---
 name: td-coding-efficiency
-description: 分析单次 AI Coding 任务的耗时、Token、成本及 Implement 并行情况，生成易读的 SVG 效率报告。用于任务结束后的效率盘点和明显浪费检查；深层归因与协作规则改进交给 td-coding-retro。
+description: 分析单次 AI Coding 任务的耗时、Token、成本及实现分工，生成可展开明细的效率报告。用于任务结束后的效率盘点和明显浪费检查；深层归因与协作规则改进交给 td-coding-retro。
 ---
 
 # Coding 效率评估
 
-让人快速判断：交付了什么，时间和成本花在哪里，有哪些值得继续观察的问题。默认交付一张 **SVG**，按需执行。
+让人快速判断交付结果、主要耗时和可观察的返工。默认交付一份离线 **HTML** 报告。
 
 ## 一、确定范围
 
@@ -21,7 +21,7 @@ description: 分析单次 AI Coding 任务的耗时、Token、成本及 Implemen
 
 ## 三、形成判断
 
-先给交付结果和验收边界，再展示七阶段耗时、Implement 实际分工、用量与成本。
+首屏给出交付结果、验收边界和一条最影响效率判断的结论。按时间列关键事件，再显示关键耗时和已记录 Token。明细依次展开其他阻塞、精确用量、阶段记录与实现分工。阶段漏记保留为未知，优先引用已有记录中的明确时间点。
 
 **Bad taste** 只列本次新增、证据明确且影响效率的观察：事实 → 影响 → 轻量建议。已确认处理的事项不重复提案，用户排除的事项不纳入；没有新观察时写“暂无新增”。推测原因单独标为待验证，不把发现信号写成已证实的因果或改善收益。
 
@@ -29,14 +29,14 @@ description: 分析单次 AI Coding 任务的耗时、Token、成本及 Implemen
 
 ## 四、生成与交付
 
-按照数据契约填写 JSON，以脚本统一生成 SVG：
+按照[数据契约](references/metrics.md#html-展示字段)填写 JSON，再生成报告。
 
 ```bash
-python3 <skill-dir>/scripts/render_svg.py <report-data.json> --output <Downloads/任务名-效率一览.svg>
+python3 <skill-dir>/scripts/render_html.py <report-data.json> --output <Downloads/任务名-效率一览.html>
 ```
 
-固定信息顺序和指标含义，内容随证据调整。长内容增加画布高度，必要时拆成多张 SVG；只有筛选、展开数据等实际交互需求才采用 HTML。
+Token 条支持按角色和阶段查看。阶段彩虹条使用可核实的分组数据，缺项按数据契约显示未知。用户明确需要静态 SVG 时使用 `scripts/render_svg.py`。
 
-默认将 SVG 和最小证据 JSON 保存在用户 **Downloads**，已有同名文件时使用新文件名。检查 SVG 能打开、文字没有重叠或截断，逐项核对数字、范围及未知项；脚本只负责呈现，不证明数据正确。
+默认将报告和最小证据 JSON 保存到用户 **Downloads**，已有同名文件时使用新文件名。打开报告核对明细展开、用量切换、数字和未知项，并检查窄屏文字。
 
-最终回复提供 SVG 链接和至多三条影响判断的结论；原始日志不作为人读报告交付。
+最终回复提供报告链接和至多三条影响判断的结论。原始日志保留在原处。
