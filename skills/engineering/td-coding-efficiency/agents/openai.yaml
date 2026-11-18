@@ -1,4 +1,4 @@
 interface:
-  display_name: "TD Coding Efficiency"
+  display_name: "td-coding-efficiency"
   short_description: "盘点任务耗时、Token、成本和实现分工，生成可展开的效率报告"
   default_prompt: "使用 $td-coding-efficiency 分析当前任务的实际效率，生成离线 HTML 报告，区分已知事实与数据缺口。"

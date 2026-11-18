@@ -2,7 +2,7 @@
 
 # TD Coding Retro
 
-Review one **AI coding session**, identify problems worth addressing and practices worth keeping, and produce an **HTML report** to help improve your **Harness**.
+By default, review one **AI coding session** and produce an **HTML report** on problems worth addressing and practices worth keeping. Explicitly request a cross-session retrospective to find evidence-backed causes shared by distinct incidents.
 
 ## 1. Retrospective results
 
@@ -34,6 +34,14 @@ $td-coding-retro Review the current session.
 ```text
 $td-coding-retro Review session <Session ID>.
 ```
+
+**Find shared causes across sessions**
+
+```text
+$td-coding-retro Review <project> across sessions from <start date> through <end date>.
+```
+
+You can also specify session IDs. The retrospective counts each incident once and reports shared causes with sources and recommendations.
 
 **After reading the report, select improvements to implement**
 

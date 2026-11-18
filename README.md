@@ -65,7 +65,7 @@ Replace `td-harness-build` with the target skill name. Add `-g` to install that 
 | Skill | What it does |
 | --- | --- |
 | [td-harness-build](skills/engineering/td-harness-build/README.md) | Builds or upgrades a reusable project AI harness with canonical AGENTS.md, `.harness` templates, template-first merging, built-in TDD guidance, and Git hooks. |
-| [td-coding-retro](skills/engineering/td-coding-retro/README.md) | Reviews one AI coding session, separates general and project improvements, captures evidence-backed examples, and generates an offline HTML report. |
+| [td-coding-retro](skills/engineering/td-coding-retro/README.md) | Reviews one AI coding session by default. On explicit request, identifies shared causes across sessions and recommends improvements. |
 | [td-coding-efficiency](skills/engineering/td-coding-efficiency/SKILL.md) | Evaluates time, tokens, cost, and implementation parallelism for one AI coding task and generates an offline HTML report. |
 
 ## Layout
