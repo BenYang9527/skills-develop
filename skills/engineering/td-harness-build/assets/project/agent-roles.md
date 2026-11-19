@@ -13,13 +13,15 @@
 
 ### 1.2 主 Agent 与 Task
 
-主 Agent 是当前与用户对话的 Agent。单 Task 时，当前主 Agent 就是 Owner；多 Task 时，当前主 Agent 协调依赖、共享资源和集成，各 Task 的 Owner 直接实施。每个 Task 同时只有一个 Owner。Owner 自测通过不等于独立验收通过。
+主 Agent 是当前与用户对话的 Agent。单 Task 时，主 Agent 就是 Owner。多 Task 时，主 Agent 协调多个 Task，日常与各 Task 的 Owner 对接，处理依赖、共享资源和集成。各 Owner 核验自己的 Task，主 Agent 汇总需用户决定的问题并合并重复项。
+
+主 Agent 用各 Task 的 `00-overview.md` 看进度和依赖，收尾时按产品 `00-overview.md` §4 核对对应 `05-review.md` 的验收结果和版本。
 
 ### 1.3 Task 之间并行
 
 产品 Overview 的任务表是依赖真源，列名为“前置依赖”。无依赖写“无”；有依赖写 Task ID 和必要的成果条件，例如“A：保存能力已合入集成分支”。依赖图仅辅助理解，不维护第二份状态。
 
-协调者启动已获准且全部前置依赖满足的任务。上游完成并集成后，重新检查可启动任务；后续任务从含所需成果的集成版本建立分支与 worktree。完整 AC 的验证责任仍按 clarify.md §3.3 分配。
+上游成果合入后，主 Agent 按 AGENTS §2.6 核对下游 Task 能否推进。下游 Task 的分支和 worktree 从包含所需成果的集成版本创建。
 
 ### 1.4 Task 内部并行
 
@@ -27,7 +29,7 @@ Task 内部只在 Implement 阶段并行，按 Plan 预先明确工作块职责�
 
 ```mermaid
 flowchart TB
-    C["协调者：核对授权与前置成果"] --> A["Task A · Owner A<br/>任务分支 / worktree A"]
+    C["主 Agent 核对启动授权与依赖"] --> A["Task A · Owner A<br/>任务分支 / worktree A"]
     C --> B["Task B · Owner B<br/>任务分支 / worktree B"]
     A --> I["Implement · Plan 已安排工作块"]
     I --> X["工作块 X<br/>临时分支 / worktree X"]
@@ -39,7 +41,7 @@ flowchart TB
     K --> NB["Task B 各自继续后续阶段<br/>见 AGENTS.md §2.3"]
 ```
 
-协调者和 Owner 可以位于同一会话或不同终端；每个 Task 的负责人及共享写入边界不随运行位置改变。
+主 Agent 和 Owner 可以位于同一会话或不同终端；每个 Task 的负责人及共享写入边界不随运行位置改变。
 
 ### 1.5 写入与共享资源
 
@@ -55,7 +57,7 @@ flowchart TB
 
 **集中返工**：Reviewer 一次报告当前可取得的、有依据的发现与验证缺口，同类问题归并，位置和处理分级按 [code-review.md §3](docs/code-review.md#3-审阅意见与处理)。Owner 在本 Task 范围内集中修复阻断项，原 Reviewer 更新原问题及复验结论。Reviewer 不派发子 Agent；实际验证与审查由本人完成。
 
-**增量复审**：首轮集中审查当前 Task；第二轮起，以最近一次已审版本为基准，核对新增差异、相关影响和原问题是否解决。理解差异时可读取必要上下文；先前结论因修改失效时扩大到受影响部分。仍有效的证据按 [verification.md §1](docs/verification.md#1-检查选择) 复用。新发现的真实阻断仍须报告，已报告的问题更新状态，不新增重复意见。
+**增量复审**：原 Reviewer 按 [验证规则 §3.4](docs/verification.md#34-修正与复验) 复验。新阻断照常报告，已有问题更新原记录。
 
 **轮次与诊断**：首次独立验收算第 1 轮；Owner 将累计验收轮次记在 Task Overview，日常自测及红绿循环不计轮次，换 Agent、会话或模型不重置。第 3 轮仍未通过时，Owner 重新审视问题、证据及修法；三轮触发诊断，不自动停止任务或等待用户。
 
