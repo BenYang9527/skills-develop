@@ -30,7 +30,7 @@
 | ------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
 | Clarify | ⏳ 进行中 | [Discussion：问题、目标与范围](01-discussion.md)                                                                 |
 | Design  | ⬜ 未开始 | [Discussion：方案比较与原型](01-discussion.md)                                                                   |
-| Confirm | ⬜ 未开始 | [需求确认入口](02-delivery-requirements.md) §5、[验收条件（Acceptance Criteria，AC）](03-acceptance-criteria.md) |
+| Confirm | ⬜ 未开始 | [交付需求](02-delivery-requirements.md)、[验收条件（Acceptance Criteria，AC）](03-acceptance-criteria.md) |
 
 开始或完成一个阶段时，更新该阶段的状态和“上次更新”时间；完成后标记为 ✅ 已完成。用户确认当前需求与 AC 后，将 Confirm 标为 ✅ 已完成。需求或 AC 变化影响原确认结论且尚未获用户同意时，将 Confirm 改为待确认；已获批准的修改不重复询问。同步更新 §1 的产品阶段状态。
 
@@ -40,7 +40,7 @@
 
 有外部需求、AC 或原型时，填写来源链接或讨论定位、相关条目与同步时间；没有则写“不涉及”。本次关键讨论见 [Discussion（讨论）](01-discussion.md)，获批需求以 [Delivery Requirements（交付需求）](02-delivery-requirements.md) 与 AC 为准。
 
-原型结论与关键调整在讨论期间记入 **[Discussion](01-discussion.md)**；整理正式文档时归入 **[Delivery Requirements §3](02-delivery-requirements.md#3-design--prototype方案比较与原型)**。本页只维护原型入口与 §2 的确认状态。
+原型结论与关键调整在讨论期间记入 [Discussion](01-discussion.md)，正式结论归入 [已选方案与原型](02-delivery-requirements.md#3-已选方案与原型)。本页维护原型入口与 §2 的确认状态。
 
 | 资料          | 来源链接及相关章节 | 上次更新            |
 | ------------- | ------------------ | ------------------- |
@@ -60,7 +60,7 @@
 - **AC-01**：保存子环境后，重开仍能读取一致的配置。
 - **AC-02**：用户保存子环境后，能够使用该配置完成诊断。
 
-| Task 与 Overview 入口 | 本 Task 交付什么       | Story / AC 关联 | 前置依赖                   | 本 Task 完整验证的 AC |
+| Task 与 Overview 入口 | 本 Task 交付什么       | 需求与 AC 关联  | 前置依赖                   | 本 Task 完整验证的 AC |
 | --------------------- | ---------------------- | --------------- | -------------------------- | --------------------- |
 | A：保存子环境         | 配置保存与重开读取     | AC-01、AC-02    | 无                         | AC-01                 |
 | B：使用子环境诊断     | 诊断实际使用保存的配置 | AC-02           | A 的保存能力已合入集成分支 | AC-02                 |
